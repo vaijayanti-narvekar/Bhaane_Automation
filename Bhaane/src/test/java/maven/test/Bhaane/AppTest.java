@@ -14,29 +14,30 @@ import org.testng.annotations.Test;
 public class AppTest {
 	
 	static WebDriver driver;
+	String firstname = "FirstName"; 
+	String lastname =" lastName";
+	String mail= "testSample@mail.com";
+	String mobNo = "9876543210"; 
+	String password = "password234";
+	String filter = "dresses";
+	String productName = "daphne dress";
+	String size = "l";
+	
 	
 	@BeforeSuite	
 	 public WebDriver createDriver() throws MalformedURLException {
 	     
 	        driver = new EdgeDriver();
 	        driver.manage().window().maximize();
+	        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
 
 	        return driver;
 	    }
-	String firstname = "FirstName"; 
-	String lastname =" lastName";
-	String mail= "testSample@mail.com";
-	String mobNo = "9876543210"; 
-	String password = "password234";
-	String filter = "bottoms";
-	String productName = "ecole pants";
-	String size = "30";
+	
 	
 	@Test(priority =1,description = "Verify Sign Up")
 	public void TestCase01() throws InterruptedException {	
-		
-		 driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
-		 
+			 
 		 Signup signup = new Signup(driver);
 		 signup.navigateWebPage();
 		 signup.signupUser(firstname, lastname, mail, mobNo, password,true);
@@ -56,8 +57,10 @@ public class AppTest {
 		
 	}
 	
+		
 	@Test(priority = 3, description = "Verify Filter Page")
 	public void TestCase03() throws InterruptedException {
+		
 		
 		CheckFilter check = new CheckFilter(driver);
 		check.verifyFilterPage(filter);
@@ -73,7 +76,7 @@ public class AppTest {
 				
 	}
 	
-	@Test(priority = 5, description = "Verify Product Details Page")
+	@Test(priority = 5, description = "Check Go to Cart")
 	public void TestCase05() throws InterruptedException {
 		
 		AddToBag addtobag = new AddToBag(driver);
@@ -82,9 +85,27 @@ public class AppTest {
 		addtobag.verifyGoToCart();
 				
 	}
-	
-	@Test(priority = 6, description = "Verify Logout")
+	@Test(priority = 6, description= "Increment the product quantity on cart page")
 	public void TestCase06() throws InterruptedException {
+		
+		CartPage cartpage = new CartPage(driver);
+		cartpage.clickgoToCart();
+		cartpage.changeQuantity(3, productName);	
+		
+	}
+	
+	@Test(priority = 7, description= "Decrement the product quantity on cart page")
+	public void TestCase07() throws InterruptedException {
+		
+		CartPage cartpage = new CartPage(driver);
+		cartpage.clickgoToCart();
+		cartpage.changeQuantity(1, productName);	
+		
+	}
+	
+	
+	@Test(priority = 8, description = "Verify Logout")
+	public void TestCase08() throws InterruptedException {
 		
 		Logout logout = new Logout(driver);
 		logout.userLogout();
@@ -92,7 +113,25 @@ public class AppTest {
 	}
 	
 	
-	 @AfterSuite
+     @Test(priority = 9,description = "Check Facebook page")
+    public void TestCase09() throws InterruptedException {
+		
+		HomePage homepage = new HomePage(driver);
+		homepage.navigateWebPage();
+		homepage.checkSocialMedia("facebook");
+		
+	}
+
+    @Test(priority = 10,description = "Check Instagram page")
+    public void TestCase10() throws InterruptedException {
+		
+		HomePage homepage = new HomePage(driver);
+		homepage.navigateWebPage();
+		homepage.checkSocialMedia("instagram");
+		
+	}
+	
+   	 @AfterSuite
 	    public void closeDriver() {
 	        if (driver != null) {
 	            driver.quit();
